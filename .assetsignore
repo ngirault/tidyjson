@@ -1,0 +1,11 @@
+﻿# Files in the repo that should not be served to the public.
+# Same syntax as .gitignore.
+
+wrangler.jsonc
+.assetsignore
+README.md
+.gitignore
+.git
+
+# Local-only build; deploying it would duplicate index.html
+tidyjson-single-file.html
