@@ -1,11 +1,26 @@
-﻿# Files in the repo that should not be served to the public.
-# Same syntax as .gitignore.
+﻿# Files in the repo that must not be served to the public.
+# Same syntax as .gitignore, but bare directory names do not reliably
+# exclude contents - pair them with an explicit /** glob.
 
-wrangler.jsonc
-.assetsignore
-README.md
-.gitignore
+# Repo and tooling internals
 .git
+.git/**
+.wrangler
+.wrangler/**
+.github
+.github/**
 
-# Local-only build; deploying it would duplicate index.html
+# Config and docs
+wrangler.jsonc
+wrangler.toml
+.assetsignore
+.gitignore
+README.md
+LICENSE
+
+# Local-only build; serving it would duplicate index.html
 tidyjson-single-file.html
+
+# OS cruft
+.DS_Store
+Thumbs.db
