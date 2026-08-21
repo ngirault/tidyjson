@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="auto">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JSON Formatter &amp; Validator - Beautify &amp; Minify JSON Online | tidyJSON</title>
+  <meta name="description" content="Free online JSON formatter and validator. Beautify, minify, and validate JSON in your browser. Nothing is uploaded, nothing is stored. No ads." />
+  <link rel="canonical" href="https://tidyjson.com/" />
+  <meta name="theme-color" content="#0A1A2F" media="(prefers-color-scheme: dark)" />
+  <meta name="theme-color" content="#0A1A2F" media="(prefers-color-scheme: light)" />
+
+  <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico" />
+  <link rel="apple-touch-icon" href="assets/images/logo.png" />
+  <link rel="stylesheet" href="assets/css/styles.css" />
+
+  <meta property="og:title" content="tidyJSON - JSON Formatter &amp; Validator" />
+  <meta property="og:description" content="Beautify, validate, and minify JSON in your browser. Nothing is uploaded, nothing is stored." />
+  <meta property="og:image" content="https://tidyjson.com/assets/images/preview.png" />
+  <meta property="og:url" content="https://tidyjson.com/" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="tidyJSON - JSON Formatter &amp; Validator" />
+  <meta name="twitter:description" content="Beautify, validate, and minify JSON in your browser. Nothing is uploaded, nothing is stored." />
+  <meta name="twitter:image" content="https://tidyjson.com/assets/images/preview.png" />
+
+  <!--
+    NOTE: Google Analytics is still loaded below. Your header says "not sent, not saved"
+    and your footer says "no data tracking" — GA4 does track visitors, so those two
+    claims are currently in tension. Either drop this block or soften the copy.
+    See the note in assets/js/script.js for the same point about the Cloudflare beacon.
+  -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-LL7H5G3M2K"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-LL7H5G3M2K');
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "tidyJSON",
+    "description": "A free tool to format, validate, beautify, and minify JSON. Runs entirely in the browser.",
+    "applicationCategory": "DeveloperApplication",
+    "url": "https://tidyjson.com/",
+    "operatingSystem": "All",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Is my JSON uploaded to a server?",
+        "acceptedAnswer": { "@type": "Answer", "text": "No. Formatting, validation, and minification all run in your browser using the built-in JSON parser. Your data never leaves the page." }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the difference between beautifying and minifying JSON?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Beautifying adds line breaks and indentation so the structure is readable. Minifying strips every optional space and newline to make the payload as small as possible for storage or transfer. Both describe the same data." }
+      },
+      {
+        "@type": "Question",
+        "name": "Why did my large ID number change?",
+        "acceptedAnswer": { "@type": "Answer", "text": "JavaScript numbers are 64-bit floats and can only represent integers exactly up to 9,007,199,254,740,991. Longer IDs lose their final digits in any JavaScript-based tool. tidyJSON warns you when this happens instead of failing silently." }
+      },
+      {
+        "@type": "Question",
+        "name": "What happens to duplicate keys in a JSON object?",
+        "acceptedAnswer": { "@type": "Answer", "text": "The JSON specification does not forbid them, and most parsers keep only the last occurrence, discarding the earlier values. tidyJSON scans your input and tells you which keys were duplicated." }
+      },
+      {
+        "@type": "Question",
+        "name": "How big a file can it handle?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Several megabytes. Deeply nested sections and very long arrays are rendered on demand as you expand them, so the page stays responsive on large API payloads." }
+      }
+    ]
+  }
+  </script>
+</head>
+
+<body>
+  <a class="skip-link" href="#raw-json">Skip to the editor</a>
+
+  <header class="masthead">
+    <div class="masthead__inner">
+      <a class="wordmark" href="/">
+        <img src="assets/images/logo.png" alt="" width="26" height="26" class="wordmark__mark" />
+        <span class="wordmark__text">tidy<b>JSON</b></span>
+      </a>
+
+      <p class="masthead__promise">
+        <span class="dot" aria-hidden="true"></span>
+        Runs in your browser. Nothing uploaded, nothing stored.
+      </p>
+
+      <button id="themeBtn" class="ghost-btn" type="button" aria-live="polite">
+        Theme: auto
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <div class="lede">
+      <h1>JSON formatter and validator</h1>
+      <p>Paste JSON below to beautify, validate, and explore it. Formatting starts as soon as you stop typing.</p>
+    </div>
+
+    <section class="workspace" aria-label="JSON editor">
+
+      <section class="panel">
+        <div class="panel__bar">
+          <h2 class="panel__title">Input</h2>
+          <span class="panel__meta" id="inputMeta"></span>
+          <div class="panel__actions">
+            <button id="sampleBtn" class="ghost-btn" type="button">Load example</button>
+            <button id="clearBtn" class="ghost-btn" type="button">Clear</button>
+          </div>
+        </div>
+
+        <div class="editor">
+          <textarea id="raw-json" placeholder="Paste JSON here, or drop a .json file anywhere on the page." spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off"></textarea>
+        </div>
+
+        <div class="panel__foot">
+          <button id="formatBtn" class="btn btn--primary" type="button">Format</button>
+          <button id="minifyBtn" class="btn" type="button">Minify</button>
+          <label class="file-btn">
+            Open file
+            <input type="file" id="fileInput" accept=".json,.txt,.geojson,.ndjson,application/json,text/plain" />
+          </label>
+        </div>
+
+        <div id="error" class="alert" role="alert" hidden>
+          <div class="alert__head">
+            <strong id="errorTitle"></strong>
+            <button id="jumpBtn" class="ghost-btn" type="button">Go to error</button>
+          </div>
+          <pre id="errorExcerpt" class="alert__excerpt"></pre>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel__bar">
+          <h2 class="panel__title">Output</h2>
+          <span class="panel__meta" id="outputMeta"></span>
+          <div class="panel__actions">
+            <button id="expandBtn" class="ghost-btn" type="button">Expand all</button>
+            <button id="collapseBtn" class="ghost-btn" type="button">Collapse all</button>
+            <button id="copyAllBtn" class="ghost-btn" type="button">Copy</button>
+            <button id="downloadBtn" class="ghost-btn" type="button">Download</button>
+          </div>
+        </div>
+
+        <div class="find">
+          <span class="find__field">
+            <input id="findInput" type="search" placeholder="Find a key or value" spellcheck="false" autocomplete="off" aria-label="Find a key or value" />
+            <button id="findClear" class="find__clear" type="button" aria-label="Clear search" hidden>&times;</button>
+          </span>&times;</button>
+          <span id="findCount" class="find__count" aria-live="polite"></span>
+          <button id="findPrev" class="ghost-btn find__nav" type="button" aria-label="Previous match" disabled>&uarr;</button>
+          <button id="findNext" class="ghost-btn find__nav" type="button" aria-label="Next match" disabled>&darr;</button>
+        </div>
+
+        <div id="notes" class="notes" hidden></div>
+
+        <div id="output" class="output" tabindex="0" role="region" aria-label="Formatted JSON">
+          <p class="output__empty">Formatted JSON will appear here.</p>
+        </div>
+
+        <div id="inspector" class="inspector" hidden>
+          <code id="inspectorPath" class="inspector__path"></code>
+          <div class="inspector__actions">
+            <button id="copyPathBtn" class="ghost-btn" type="button">Copy path</button>
+            <button id="copyValueBtn" class="ghost-btn" type="button">Copy value</button>
+          </div>
+        </div>
+      </section>
+
+    </section>
+
+    <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+    <section class="prose">
+      <h2>What this tool does</h2>
+      <p>
+        tidyJSON turns unreadable JSON into something you can actually navigate. Paste a response
+        from an API, a config file, or a log line, and you get an indented, colour-coded tree you can
+        collapse section by section. It also tells you about the two things most formatters hide from
+        you: integers too large for JavaScript to store exactly, and duplicate keys that the parser
+        silently threw away.
+      </p>
+
+      <h3>Everything happens in your browser</h3>
+      <p>
+        There is no upload step and no server round trip. The page uses the JSON parser built into
+        your browser, so the data in the box stays on your machine even if you close the tab or lose
+        your connection. That makes it safe for payloads you would not paste into a random website:
+        staging credentials, customer records, internal API responses.
+      </p>
+
+      <h3>Working with large payloads</h3>
+      <p>
+        Long arrays load in batches and nested sections are built only when you expand them, so a
+        multi-megabyte file opens without freezing the tab. Use <strong>Collapse all</strong> to get
+        an overview of a document's top-level shape, then open just the branch you care about.
+      </p>
+
+      <h2 id="faq">Common questions</h2>
+
+      <h3>Is my JSON uploaded to a server?</h3>
+      <p>
+        No. Formatting, validation, and minification all run in your browser. Your data never leaves
+        the page.
+      </p>
+
+      <h3>What is the difference between beautifying and minifying JSON?</h3>
+      <p>
+        Beautifying adds line breaks and indentation so the structure is readable. Minifying strips
+        every optional space and newline to make the payload as small as possible for storage or
+        transfer. Both describe exactly the same data.
+      </p>
+
+      <h3>Why did my large ID number change?</h3>
+      <p>
+        JavaScript numbers are 64-bit floats and can represent integers exactly only up to
+        9,007,199,254,740,991. Longer IDs — the kind Twitter, Discord, and many databases hand out —
+        lose their final digits in any JavaScript-based tool. tidyJSON warns you when it spots one
+        instead of quietly rewriting your data.
+      </p>
+
+      <h3>What happens to duplicate keys in a JSON object?</h3>
+      <p>
+        The specification does not forbid them, and most parsers keep only the last occurrence,
+        discarding everything before it. tidyJSON scans your input and names the keys that were
+        duplicated.
+      </p>
+
+      <h3>How big a file can it handle?</h3>
+      <p>
+        Several megabytes. Very long arrays and deep nesting are rendered on demand, so the page
+        stays responsive on large API payloads.
+      </p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="site-footer__inner">
+      <div>
+        <h2>Support this tool</h2>
+        <p>tidyJSON is free and carries no advertising. If it saved you some time, a donation helps keep it online.</p>
+        <form action="https://www.paypal.com/donate" method="post" target="_top">
+          <input type="hidden" name="hosted_button_id" value="74GBSTVWLTKEU" />
+          <button type="submit" class="btn">Donate via PayPal</button>
+        </form>
+      </div>
+      <p class="site-footer__legal">© 2025 tidyJSON</p>
+    </div>
+  </footer>
+
+  <div id="dropOverlay" class="drop-overlay" hidden>
+    <div class="drop-overlay__card">Drop a JSON file to open it</div>
+  </div>
+
+  <script src="assets/js/script.js" defer></script>
+</body>
+</html>

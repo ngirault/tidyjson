@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="auto">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page not found - tidyJSON</title>
+  <meta name="robots" content="noindex" />
+  <link rel="icon" type="image/x-icon" href="/assets/images/favicon.ico" />
+  <link rel="stylesheet" href="/assets/css/styles.css" />
+  <script>
+    /* Match the theme the visitor chose on the main page. */
+    try {
+      var t = localStorage.getItem('tidyjson.theme');
+      if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+    } catch (e) { /* private mode */ }
+  </script>
+</head>
+
+<body>
+  <header class="masthead">
+    <div class="masthead__inner">
+      <a class="wordmark" href="/">
+        <img src="/assets/images/logo.png" alt="" width="26" height="26" class="wordmark__mark" />
+        <span class="wordmark__text">tidy<b>JSON</b></span>
+      </a>
+      <p class="masthead__promise">
+        <span class="dot" aria-hidden="true"></span>
+        Runs in your browser. Nothing uploaded, nothing stored.
+      </p>
+    </div>
+  </header>
+
+  <main>
+    <div class="notfound">
+      <p class="notfound__code">404</p>
+      <h1>That page isn't here</h1>
+      <p class="notfound__text">
+        tidyJSON is a single page, so there's only one place to be. The formatter
+        is waiting for you on the home page.
+      </p>
+      <p><a class="btn btn--primary" href="/">Open the formatter</a></p>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="site-footer__inner">
+      <p class="site-footer__legal">© 2025 tidyJSON</p>
+    </div>
+  </footer>
+</body>
+</html>
