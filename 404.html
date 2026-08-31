@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en" data-theme="auto">
 <head>
   <meta charset="UTF-8" />
@@ -7,13 +7,7 @@
   <meta name="robots" content="noindex" />
   <link rel="icon" type="image/x-icon" href="/assets/images/favicon.ico" />
   <link rel="stylesheet" href="/assets/css/styles.css" />
-  <script>
-    /* Match the theme the visitor chose on the main page. */
-    try {
-      var t = localStorage.getItem('tidyjson.theme');
-      if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
-    } catch (e) { /* private mode */ }
-  </script>
+  <script src="/assets/js/theme.js"></script>
 </head>
 
 <body>
@@ -44,7 +38,7 @@
 
   <footer class="site-footer">
     <div class="site-footer__inner">
-      <p class="site-footer__legal">© 2025 tidyJSON</p>
+      <p class="site-footer__legal">Â© 2025 tidyJSON</p>
     </div>
   </footer>
 </body>
